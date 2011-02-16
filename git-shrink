@@ -1,0 +1,12 @@
+#!/bin/sh
+
+shrinkgit() {
+        gitstop="$(du -sk .git)"
+        git repack && git gc --aggressive
+        gitsm="$(du -sk .git)"
+        echo "before ${gitstop}"
+        echo "afte r ${gitsm}"
+}
+
+[ -d .git ] || exit 1
+shrinkgit
