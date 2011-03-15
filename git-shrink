@@ -5,7 +5,7 @@ shrinkgit() {
         git repack && git gc --aggressive
         gitsm="$(du -sk .git)"
         echo "before ${gitstop}"
-        echo "afte r ${gitsm}"
+        echo " after ${gitsm}"
 }
 
 [ -d .git ] || exit 1
