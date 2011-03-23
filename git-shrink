@@ -1,11 +1,14 @@
 #!/bin/sh
 
 shrinkgit() {
-        gitstop="$(du -sk .git)"
-        git repack && git gc --aggressive
-        gitsm="$(du -sk .git)"
-        echo "before ${gitstop}"
-        echo " after ${gitsm}"
+        local gitstop="$(du -sk .git|awk '{print $1}')"
+	local starts=$SECONDS
+	printf "start: %7d gc: " $gitstop
+        ( git repack && git gc --aggressive ) > .git/shrink.log 2>&1 || \
+		cat .git/shrink.log
+        local gitsm="$(du -sk .git|awk '{print $1}')"
+	printf "%7d diff: %7d (%ds)\n" $gitsm $(echo "$gitstop - $gitsm"|bc) \
+	    $((SECONDS - starts))
 }
 
 [ -d .git ] || exit 1
